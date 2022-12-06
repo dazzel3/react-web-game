@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>웹 게임</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <!--<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>-->
+    <!--<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>-->
+    <script type="text/babel">
+      class LikeButton extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = { liked: false };
+        }
+
+        render() {
+          if (this.state.liked) {
+            return 'You liked this.';
+          }
+
+          /* onClick에서 화살표 함수를 사용하는 이유: 바닐라 js에서 아래와 같이 사용하기 때문 
+           addEventListener('click', () => {
+            this.setState({ liked: true })
+          }) */
+
+          // 자바스크립트에서 아래와 같은 jsx 문법을 이해할 수 없기 때문에 babel을 사용하여 이해할 수 있게 해줌
+          return (
+            // this.state.liked = true; 이처럼 객체를 직접적으로 바꾸지 말고 복사해서 바꿔라
+            <button onClick={() => this.setState({ liked: true })}>Like</button>
+          );
+        }
+      }
+    </script>
+    <script type="text/babel">
+      // ReactDOM.render(<LikeButton />, document.querySelector('#root')); React 17버전 코드
+      ReactDOM.createRoot(document.querySelector('#root')).render(
+        <LikeButton />
+      ); // React 18버전 코드
+    </script>
+  </body>
+</html>
