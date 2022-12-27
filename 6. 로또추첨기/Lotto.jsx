@@ -1,7 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import Ball from './Ball';
 
 function getWinNumbers() {
+  console.log('getWin');
   const candidate = Array(45)
     .fill()
     .map((_, i) => i + 1);
@@ -16,7 +23,8 @@ function getWinNumbers() {
   return [...winNumbers, bonusNumber];
 }
 const Lotto = () => {
-  const [winNumbers, setWinNumbers] = useState(getWinNumbers());
+  const lottoNumbers = useMemo(() => getWinNumbers(), []); // 함수의 return 값을 저장하고 있음
+  const [winNumbers, setWinNumbers] = useState(lottoNumbers);
   const [winBalls, setWinBalls] = useState([]);
   const [bonus, setBonus] = useState(null);
   const [redo, setRedo] = useState(false);
@@ -46,13 +54,16 @@ const Lotto = () => {
     }, 7000);
   };
 
-  const onClickRedo = () => {
+  // 함수 자체를 기억해둬서 함수 컴포넌트가 다시 실행될 때 해당 함수를 다시 생성하지 않음
+  // 두 번째 인자로 배열 안에 넣은 상태가 변하면 다시 생성됨
+  // 자식 컴포넌트에 props로 전달할 함수라면 useCallback으로 감싸는 것이 좋다.
+  const onClickRedo = useCallback(() => {
     setWinNumbers(getWinNumbers());
     setWinBalls([]);
     setBonus(null);
     setRedo(false);
     timeouts.current = [];
-  };
+  }, []);
 
   return (
     <>
